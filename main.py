@@ -13,7 +13,10 @@ class palace:
         self.add_tile (palace,tile): Adds a tile to the top of the palace.
         self.remove_tile (palace, int): Removes a tile from the palace at the given tile number.
         self.insert_tile (palace, tile, int): Inserts a tile into the palace at the given tile number.
-    
+        self.tile_count (palace): Returns the number of tiles in the palace.
+        self.windows_count (palace): Returns the number of windows on the palace.
+        self.is_pure (palace): Returns 1 if the palace is of a single material, 0 if not.
+        self.score (palace): Getter for self._score.
     '''
     def __init__(self, foundation):
         '''
@@ -109,6 +112,9 @@ class palace:
                 break
         
         return pure
+    
+    def score(self):
+        return self._score
 
 class tile:
     '''
@@ -170,3 +176,42 @@ def evaluate_palace(palace):
         return windows + 6 + pure * 6
     else:
         raise Exception("Invalid height.")
+
+### Testing ### Sourced from [https://www.ultraboardgames.com/palazzo/game-rules.php] ### There are 5 * 3 * 3 = 45 Unique tiles in the game.
+
+palace_one = palace(tile(3,3,"S"))
+assert palace_one.score() == -5
+
+palace_two = palace(tile(2,3,"B"))
+palace_two.add_tile(tile(4,2,"B"))
+assert palace_two.score() == 0
+
+palace_three = palace(tile(1,3,"B"))
+palace_three.add_tile(tile(2,1,"S"))
+palace_three.add_tile(tile(5,2,"B"))
+assert palace_three.score() == 6
+
+palace_four = palace(tile(2,2,"S"))
+palace_four.add_tile(tile(3,2,"S"))
+palace_four.add_tile(tile(4,2,"S"))
+palace_four.add_tile(tile(5,1,"S"))
+assert palace_four.score() == 13
+
+palace_five = palace(tile(1,3,"M"))
+palace_five.add_tile(tile(2,1,"M"))
+palace_five.add_tile(tile(3,2,"M"))
+palace_five.add_tile(tile(4,3,"S"))
+palace_five.add_tile(tile(5,2,"M"))
+assert palace_five.score() == 17
+
+palace_six = palace(tile(1,1,"B"))
+palace_six.add_tile(tile(2,2,"B"))
+palace_six.add_tile(tile(3,3,"B"))
+palace_six.add_tile(tile(4,1,"B"))
+palace_six.add_tile(tile(5,1,"B"))
+assert palace_six.score() == 20
+
+palace_seven = palace(tile(2,2,"M"))
+palace_seven.add_tile(tile(3,1,"M"))
+palace_seven.add_tile(tile(4,2,"M"))
+assert palace_seven.score() == 8
