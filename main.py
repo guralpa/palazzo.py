@@ -110,6 +110,48 @@ class palace:
         
         return pure
 
+class tile:
+    '''
+    A class modelling a single Palazzo tile.
+
+    Attributes:
+        self._level (int): Palace level of the tile
+        self._windows (int): Number of windows on the tile
+        self._material (string): Material of the tile
+    
+    Methods:
+        self.__init__(tile, int, int, string): Initialize level, windows, and material.
+        self.level(): Getter for self._level
+        self.windows(): Getter for self._windows
+        self.material(): Getter for self._material
+    '''
+
+    def __init__(self, level, windows, material):
+        '''
+        Initializes the tile with the given level, windows, and material.
+
+        Args:
+            level (int): The level value of the tile
+            windows (int): The number of windows on the tile
+            material (string): The material the tile is made of
+        '''
+        self._level = level
+        self._windows = windows
+        self._material = material
+    
+    def level(self):
+        '''Getter for self._level.'''
+        return self._level
+    
+    def windows(self):
+        '''Getter for self._windows.'''
+        return self._windows
+    
+    def material(self):
+        '''Getter for self._material.'''
+        return self._material
+
+
 def evaluate_palace(palace):
     '''Calculates the score of a palace according to Palazzo rules and returns it.'''
     height = palace.tile_count()
