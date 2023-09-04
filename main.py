@@ -81,7 +81,7 @@ class palace:
         Returns:
             None
         '''
-        if self._tiles[-1].level < tile.level():
+        if self._tiles[-1].level() < tile.level():
             self._tiles.append(tile)
             self._score = evaluate_palace(self)
         else:
