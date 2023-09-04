@@ -1,92 +1,130 @@
 #!python3
 
-class tower:
+class palace:
     '''
-    A class modelling a single Palazzo tower.
+    A class modelling a single Palazzo palace.
     
     Attributes:
-        self._floors (list_of floor): The floors of the tower, in order, from bottom to top.
-        self._score (int): The score of the tower at any given time.
+        self._tiles (list_of tile): The tiles of the palace, in order, from bottom to top.
+        self._score (int): The score of the palace at any given time.
     
     Methods:
-        self.__init__(tower, floor): Initializes the tower with the given floor as the first and a score of -5.
-        self.add_floor (tower,floor): Adds a floor to the top of the tower.
-        self.remove_floor (tower, int): Removes a floor from the tower at the given floor number.
-        self.insert_floor (tower, floor, int): Inserts a floor into the tower at the given floor number.
+        self.__init__(palace, tile): Initializes the palace with the given tile as the first and a score of -5.
+        self.add_tile (palace,tile): Adds a tile to the top of the palace.
+        self.remove_tile (palace, int): Removes a tile from the palace at the given tile number.
+        self.insert_tile (palace, tile, int): Inserts a tile into the palace at the given tile number.
     
     '''
     def __init__(self, foundation):
         '''
-        Initializes tower with the first block placed and assigns the single-floor score of -5.
+        Initializes palace with the first block placed and assigns the single-tile score of -5.
         
         Args:
-            self (tower): The tower being initialized.
-            foundation (level): The first level in the tower.
+            self (palace): The palace being initialized.
+            foundation (tile): The first level in the palace.
         '''
-        self._floors = [foundation]
+        self._tiles = [foundation]
         self._score = -5
     
-    def add_floor(self, floor):
+    def add_tile(self, tile):
         '''
-        Adds a floor to the top of the tower and updates the score of the tower. Intended for use when addings floors after purchase.
+        Adds a tile to the top of the palace and updates the score of the palace. Intended for use when addings tiles after purchase.
         
         Args:
-            self (tower): The tower being added to.
-            floor (floor): The floor being added to the tower.
+            self (palace): The palace being added to.
+            tile (tile): The tile being added to the palace.
         
         Returns:
             None
         '''
-        if self._floors[-1].level < floor.level():
-            self._floors.append(floor)
-            self._score = evaluate_tower(self)
+        if self._tiles[-1].level < tile.level():
+            self._tiles.append(tile)
+            self._score = evaluate_palace(self)
         else:
-            print("Invalid floor level.")
+            print("Invalid tile level.")
     
-    def remove_floor(self, floor_number):
+    def remove_tile(self, tile_number):
         '''
-        Removes the floor at the given number from the tower, returning it as a floor object. Updates the score of the tower.
+        Removes the tile at the given number from the palace, returning it as a tile object. Updates the score of the palace.
         
         Args:
-            self (tower): The tower being removed from.
-            floor_number (int): The floor number of the floor being removed.
+            self (palace): The palace being removed from.
+            tile_number (int): The tile number of the tile being removed.
         
         Returns:
-            removed_floor (floor): The floor that was removed.
+            removed_tile (tile): The tile that was removed.
         '''
-        if 0 < floor_number and floor_number <= len(self._floors):
-            removed_floor = self._floors[floor_number-1]
-            self._floors = self._floors[0:floor_number-1] + self._floors[floor_number:len(self.floors)]
-            self._score = evaluate_tower(self)
-            return removed_floor
+        if 0 < tile_number and tile_number <= len(self._tiles):
+            removed_tile = self._tiles[tile_number-1]
+            self._tiles = self._tiles[0:tile_number-1] + self._tiles[tile_number:len(self.tiles)]
+            self._score = evaluate_palace(self)
+            return removed_tile
         else:
-            print("Invalid floor number.")
+            print("Invalid tile number.")
     
-    def insert_floor(self, floor, floor_number):
+    def insert_tile(self, tile, tile_number):
         '''
-        Inserts a floor at the given number from the tower, pushing all other floors up. Updates the score of the tower.
+        Inserts a tile at the given number from the palace, pushing all other tiles up. Updates the score of the palace.
         
         Args:
-            self (tower): The tower being inserted into.
-            floor (floor): The floor being inserted.
-            floor_number (int): The floor number at which the floor will be inserted.
+            self (palace): The palace being inserted into.
+            tile (tile): The tile being inserted.
+            tile_number (int): The tile number at which the tile will be inserted.
         
         Returns:
             None
         '''
-        if floor_number == 1 and floor.level() <= self._floors[0].level():
-            self._floors.insert(floor,0)
-            self._score = evaluate_tower(self)
-        elif floor_number == len(self._floors)+1 and self._floors[-1].level() < floor.level():
-            self._floors.append(floor)
-            self._score = evaluate_tower(self)
-        elif 1 < floor_number and floor_number <= len(self._floors):
-            if self._floors[floor_number-2].level() < floor.level() and floor.level() < self._floors[floor_number-1].level():
-                self._floors.insert(floor,floor_number-1)
-                self._score = evaluate_tower(self)
+        if tile_number == 1 and tile.level() <= self._tiles[0].level():
+            self._tiles.insert(tile,0)
+            self._score = evaluate_palace(self)
+        elif tile_number == len(self._tiles)+1 and self._tiles[-1].level() < tile.level():
+            self._tiles.append(tile)
+            self._score = evaluate_palace(self)
+        elif 1 < tile_number and tile_number <= len(self._tiles):
+            if self._tiles[tile_number-2].level() < tile.level() and tile.level() < self._tiles[tile_number-1].level():
+                self._tiles.insert(tile,tile_number-1)
+                self._score = evaluate_palace(self)
         else:
-            print("Invalid floor number.")
+            print("Invalid tile number.")
+    
+    def tile_count(self):
+        '''Returns the number of tiles in the palace.'''
+        return len(self._tiles)
+    
+    def window_count(self):
+        '''Returns the number of windows on the palace.'''
+        count = 0
+        for tile in self._tiles:
+            count += tile.windows()
+        return count
 
-def evaluate_tower(tower):
-    '''Calculates the score of a tower according to Palazzo rules and returns it.'''
-    return -5
+    def is_pure(self):
+        '''Returns a 1 if the palace is pure in material, 0 otherwise.'''
+        pure = True
+        material = self._tiles[0].material()
+
+        for tile in self._tiles:
+            if tile.material() != material:
+                pure = False
+                break
+        
+        return pure
+
+def evaluate_palace(palace):
+    '''Calculates the score of a palace according to Palazzo rules and returns it.'''
+    height = palace.tile_count()
+    windows = palace.window_count()
+    pure = palace.is_pure()
+
+    if height == 1:
+        return -5
+    elif height == 2:
+        return 0
+    elif height == 3:
+        return windows + 0 + pure * 3
+    elif height == 4:
+        return windows + 3 + pure * 3
+    elif height == 5:
+        return windows + 6 + pure * 6
+    else:
+        raise Exception("Invalid height.")
